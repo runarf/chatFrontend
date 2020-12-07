@@ -9,7 +9,7 @@ interface MessageContainer {
 }
 
 const dateNow = Date.now();
-const oneMinute = 60000;
+const oneMinute = 600000;
 
 const mockMessages: MessageContainer[] = [
   { author: 'Lana', date: dateNow, id: 0, message: 'Hallo is anyone here?' },
@@ -39,8 +39,8 @@ function App() {
 
   return (
     <div className="App" style={{ width: '300px', margin: '0 auto' }}>
-      <div>
-        Your name
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>Your name:</div>
         <input type="text" onChange={(e) => setName(e.target.value)} value={name} />
       </div>
       <div id="chatWindow">
@@ -50,6 +50,7 @@ function App() {
         >
           {messages.map((messageContainer) => {
             const { id, author, message, date } = messageContainer;
+            const formattedDate = format(date, 'd MMM yyyy H:mm');
             return (
               <div
                 key={id}
@@ -63,13 +64,17 @@ function App() {
               >
                 <small>{author}</small>
                 <div>{message}</div>
-                <small>{format(date, 'd MMM yyyy H:s')}</small>
+                <small>{formattedDate}</small>
               </div>
             );
           })}
         </div>
-        <div id="newMessage">
-          <input type="text" onChange={(e) => setMessage(e.target.value)} value={message} />
+        <div id="newMessage" style={{ display: 'flex', width: '100%' }}>
+          <textarea
+            style={{ flexGrow: 2 }}
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
+          />
           <button
             onClick={() => {
               setMessage('');
