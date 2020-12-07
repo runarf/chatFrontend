@@ -39,17 +39,28 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App" style={{ width: '300px', margin: '0 auto' }}>
       <div>
         Your name
         <input type="text" onChange={(e) => setName(e.target.value)} value={name} />
       </div>
-      <div id="chatWindow" style={{ display: 'flex' }}>
-        <div id="messages">
+      <div id="chatWindow">
+        <div
+          id="messages"
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+        >
           {messages.map((messageContainer) => {
             const { id, author, message, date } = messageContainer;
             return (
-              <div key={id}>
+              <div
+                key={id}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                  alignItems: 'flex-start',
+                }}
+              >
                 <div>{author}</div>
                 <div>{message}</div>
                 <div>{date}</div>
@@ -57,29 +68,17 @@ function App() {
             );
           })}
         </div>
-        <input type="text" onChange={(e) => setMessage(e.target.value)} value={message} />
-        <button
-          onClick={() => {
-            setMessage('');
-          }}
-        >
-          Send
-        </button>
+        <div id="newMessage">
+          <input type="text" onChange={(e) => setMessage(e.target.value)} value={message} />
+          <button
+            onClick={() => {
+              setMessage('');
+            }}
+          >
+            Send
+          </button>
+        </div>
       </div>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }
