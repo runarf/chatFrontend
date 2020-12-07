@@ -58,11 +58,12 @@ function App() {
                   flexDirection: 'column',
                   width: '100%',
                   alignItems: 'flex-start',
+                  margin: '10px 0px',
                 }}
               >
-                <div>{author}</div>
+                <small>{author}</small>
                 <div>{message}</div>
-                <div>{format(date, 'd MMM yyyy H:s')}</div>
+                <small>{format(date, 'd MMM yyyy H:s')}</small>
               </div>
             );
           })}
