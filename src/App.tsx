@@ -1,6 +1,5 @@
+import format from 'date-fns/format';
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 interface MessageContainer {
   id: number;
@@ -63,7 +62,7 @@ function App() {
               >
                 <div>{author}</div>
                 <div>{message}</div>
-                <div>{date}</div>
+                <div>{format(date, 'd MMM yyyy H:s')}</div>
               </div>
             );
           })}
