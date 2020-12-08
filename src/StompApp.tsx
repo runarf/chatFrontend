@@ -73,7 +73,7 @@ $(function () {
     e.preventDefault();
   });
   $('#connect').click(function () {
-    connect(showGreeting);
+    connect((message) => showGreeting([message]));
   });
   $('#disconn ect').click(function () {
     disconnect();

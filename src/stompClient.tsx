@@ -11,7 +11,7 @@ export interface SavedMessage {
 
 let stompClient: CompatClient | null = null;
 
-export function connect(displayMessages: (savedMessages: SavedMessage[]) => void) {
+export function connect(saveMessage: (savedMessages: SavedMessage) => void) {
   var socket = new SockJS('/gs-guide-websocket');
   stompClient = Stomp.over(socket);
 
@@ -19,8 +19,8 @@ export function connect(displayMessages: (savedMessages: SavedMessage[]) => void
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient?.subscribe('/topic/greetings', function (greetingResponse) {
-      const savedMessages: SavedMessage[] = JSON.parse(greetingResponse.body);
-      displayMessages(savedMessages);
+      const newSavedMessage: SavedMessage = JSON.parse(greetingResponse.body);
+      saveMessage(newSavedMessage);
     });
   });
 }

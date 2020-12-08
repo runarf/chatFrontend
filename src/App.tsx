@@ -10,7 +10,7 @@ function App() {
   const [messages, setMessages] = useState<SavedMessage[]>([]);
 
   useEffect(() => {
-    connect(setMessages);
+    connect((newMessage) => setMessages((previousMessages) => [...previousMessages, newMessage]));
 
     return () => disconnect();
   }, []);
