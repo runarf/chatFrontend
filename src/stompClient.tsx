@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { setConnected, showGreeting } from './StompApp';
@@ -12,7 +11,7 @@ export interface SavedMessage {
 
 let stompClient: CompatClient | null = null;
 
-export function connect() {
+export function connect(displayMessages: (savedMessages: SavedMessage[]) => void) {
   var socket = new SockJS('/gs-guide-websocket');
   stompClient = Stomp.over(socket);
 
@@ -20,8 +19,8 @@ export function connect() {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient?.subscribe('/topic/greetings', function (greetingResponse) {
-      const greeting: SavedMessage = JSON.parse(greetingResponse.body);
-      showGreeting(greeting);
+      const savedMessages: SavedMessage[] = JSON.parse(greetingResponse.body);
+      displayMessages(savedMessages);
     });
   });
 }
@@ -39,8 +38,8 @@ interface NewMessage {
   message: string;
 }
 
-export function sendName() {
-  const newGreeting: NewMessage = { author: $('#name').val() as string, message: 'HEIA' };
-  const message = JSON.stringify(newGreeting);
-  stompClient?.send('/app/hello', {}, message);
+export function sendNewMessage(author: string, message: string) {
+  const newGreeting: NewMessage = { author, message };
+  const newMessageJson = JSON.stringify(newGreeting);
+  stompClient?.send('/app/hello', {}, newMessageJson);
 }

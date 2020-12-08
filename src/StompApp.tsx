@@ -1,4 +1,4 @@
-import { connect, disconnect, SavedMessage, sendName } from './stompClient';
+import { connect, disconnect, SavedMessage, sendNewMessage } from './stompClient';
 import $ from 'jquery';
 
 export const StompApp = () => {
@@ -62,8 +62,10 @@ export function setConnected(connected: boolean) {
   $('#greetings').html('');
 }
 
-export function showGreeting(message: SavedMessage) {
-  $('#greetings').append('<tr><td>' + message.message + '</td></tr>');
+export function showGreeting(messages: SavedMessage[]) {
+  messages.forEach((message) => {
+    $('#greetings').append('<tr><td>' + message.message + '</td></tr>');
+  });
 }
 
 $(function () {
@@ -71,12 +73,12 @@ $(function () {
     e.preventDefault();
   });
   $('#connect').click(function () {
-    connect();
+    connect(showGreeting);
   });
   $('#disconn ect').click(function () {
     disconnect();
   });
   $('#send').click(function () {
-    sendName();
+    sendNewMessage('Run', $('#name').val() as string);
   });
 });

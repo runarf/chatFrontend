@@ -1,40 +1,18 @@
 import format from 'date-fns/format';
+import { disconnect } from 'process';
 import React, { useEffect, useState } from 'react';
 import { StompApp } from './StompApp';
-interface MessageContainer {
-  id: number;
-  date: number;
-  message: string;
-  author: string;
-}
-
-const dateNow = Date.now();
-const oneMinute = 600000;
-
-const mockMessages: MessageContainer[] = [
-  { author: 'Lana', date: dateNow, id: 0, message: 'Hallo is anyone here?' },
-  { author: 'Mark', date: dateNow + oneMinute, id: 1, message: "Yes, I'm here." },
-  { author: 'Kim', date: dateNow + 2 * oneMinute, id: 2, message: "I'm also here!" },
-  {
-    author: 'Lana',
-    date: dateNow + 3 * oneMinute,
-    id: 3,
-    message:
-      'Ok I have a question regarding the project we started working on last week. Is there anything I can do to help?',
-  },
-];
+import { connect, SavedMessage, sendNewMessage } from './stompClient';
 
 function App() {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<MessageContainer[]>([]);
+  const [messages, setMessages] = useState<SavedMessage[]>([]);
 
   useEffect(() => {
-    const getMessages = () => {
-      setMessages(mockMessages);
-    };
+    connect(setMessages);
 
-    getMessages();
+    return () => disconnect();
   }, []);
 
   return (
@@ -50,8 +28,8 @@ function App() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
           >
             {messages.map((messageContainer) => {
-              const { id, author, message, date } = messageContainer;
-              const formattedDate = format(date, 'd MMM yyyy H:mm');
+              const { id, author, message, timestamp } = messageContainer;
+              const formattedDate = format(timestamp, 'd MMM yyyy H:mm');
               return (
                 <div
                   key={id}
@@ -78,6 +56,7 @@ function App() {
             />
             <button
               onClick={() => {
+                sendNewMessage(name, message);
                 setMessage('');
               }}
             >
