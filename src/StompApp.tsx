@@ -1,4 +1,4 @@
-import { connect, disconnect, sendName } from './stompClient';
+import { connect, disconnect, Greeting, sendName } from './stompClient';
 import $ from 'jquery';
 
 export const StompApp = () => {
@@ -62,8 +62,8 @@ export function setConnected(connected: boolean) {
   $('#greetings').html('');
 }
 
-export function showGreeting(message: string) {
-  $('#greetings').append('<tr><td>' + message + '</td></tr>');
+export function showGreeting(message: Greeting) {
+  $('#greetings').append('<tr><td>' + message.content + '</td></tr>');
 }
 
 $(function () {

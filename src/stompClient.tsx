@@ -3,6 +3,10 @@ import { CompatClient, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { setConnected, showGreeting } from './StompApp';
 
+export interface Greeting {
+  content: string;
+}
+
 let stompClient: CompatClient | null = null;
 export function connect() {
   var socket = new SockJS('/gs-guide-websocket');
@@ -11,8 +15,9 @@ export function connect() {
   stompClient?.connect({}, function (frame: any) {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient?.subscribe('/topic/greetings', function (greeting) {
-      showGreeting(JSON.parse(greeting.body).content);
+    stompClient?.subscribe('/topic/greetings', function (greetingResponse) {
+      const greeting: Greeting = JSON.parse(greetingResponse.body);
+      showGreeting(greeting);
     });
   });
 }
@@ -25,6 +30,12 @@ export function disconnect() {
   console.log('Disconnected');
 }
 
+interface NewGreeting {
+  name: string;
+}
+
 export function sendName() {
-  stompClient?.send('/app/hello', {}, JSON.stringify({ name: $('#name').val() }));
+  const newGreeting: NewGreeting = { name: $('#name').val() as string };
+  const message = JSON.stringify(newGreeting);
+  stompClient?.send('/app/hello', {}, message);
 }
