@@ -2,13 +2,15 @@ import format from 'date-fns/format';
 import { useEffect, useState } from 'react';
 import { connect, SavedMessage, sendNewMessage } from './stompClient';
 
+export const baseUrl = `http://localhost:8080`;
+
 function App() {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<SavedMessage[]>([]);
 
   useEffect(() => {
-    fetch('/saved-messages')
+    fetch(`${baseUrl}/saved-messages`)
       .then((response) => response.json())
       .then((data) => {
         setMessages(data);

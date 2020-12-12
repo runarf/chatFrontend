@@ -1,5 +1,6 @@
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { baseUrl } from './App';
 
 export interface SavedMessage {
   message: string;
@@ -11,7 +12,7 @@ export interface SavedMessage {
 let stompClient: CompatClient | null = null;
 
 export function connect(saveMessage: (savedMessages: SavedMessage) => void) {
-  var socket = new SockJS('/gs-guide-websocket');
+  var socket = new SockJS(`${baseUrl}/gs-guide-websocket`);
   stompClient = Stomp.over(socket);
 
   stompClient?.connect({}, function (frame: any) {
