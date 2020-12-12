@@ -1,6 +1,5 @@
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { setConnected, showGreeting } from './StompApp';
 
 export interface SavedMessage {
   message: string;
@@ -16,7 +15,6 @@ export function connect(saveMessage: (savedMessages: SavedMessage) => void) {
   stompClient = Stomp.over(socket);
 
   stompClient?.connect({}, function (frame: any) {
-    setConnected(true);
     console.log('Connected: ' + frame);
     stompClient?.subscribe('/topic/greetings', function (greetingResponse) {
       const newSavedMessage: SavedMessage = JSON.parse(greetingResponse.body);
@@ -24,15 +22,6 @@ export function connect(saveMessage: (savedMessages: SavedMessage) => void) {
     });
   });
 }
-
-export function disconnect() {
-  if (stompClient !== null) {
-    stompClient?.disconnect();
-  }
-  setConnected(false);
-  console.log('Disconnected');
-}
-
 interface NewMessage {
   author: string;
   message: string;

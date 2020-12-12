@@ -1,7 +1,5 @@
 import format from 'date-fns/format';
-import { disconnect } from 'process';
-import React, { useEffect, useState } from 'react';
-import { StompApp } from './StompApp';
+import { useEffect, useState } from 'react';
 import { connect, SavedMessage, sendNewMessage } from './stompClient';
 
 function App() {
@@ -17,8 +15,6 @@ function App() {
       });
 
     connect((newMessage) => setMessages((previousMessages) => [...previousMessages, newMessage]));
-
-    return () => disconnect();
   }, []);
 
   return (
@@ -71,7 +67,6 @@ function App() {
           </div>
         </div>
       </div>
-      <StompApp />
     </div>
   );
 }
