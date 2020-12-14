@@ -11,14 +11,16 @@ export interface SavedMessage {
 
 let stompClient: CompatClient | null = null;
 
-export function subscribeToNewMessages(saveMessage: (savedMessages: SavedMessage) => void) {
+export function subscribeToNewMessages(
+  handleNewSavedMessage: (newSavedMessages: SavedMessage) => void
+) {
   var socket = new SockJS(`${baseUrl}/gs-guide-websocket`);
   stompClient = Stomp.over(socket);
 
-  stompClient?.connect({}, function (frame: any) {
+  stompClient?.connect({}, function () {
     stompClient?.subscribe('/topic/greetings', function (greetingResponse) {
       const newSavedMessage: SavedMessage = JSON.parse(greetingResponse.body);
-      saveMessage(newSavedMessage);
+      handleNewSavedMessage(newSavedMessage);
     });
   });
 }
